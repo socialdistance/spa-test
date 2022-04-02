@@ -1,21 +1,23 @@
-BIN := "./bin/spa-test"
-DOCKER_IMG="spa-test:develop"
+BIN := "./bin/spa"
+DOCKER_IMG="spa:develop"
 
-GIT_HASH := $(shell git log --format="%h" -n 1)
+#GIT_HASH := $(shell git log --format="%h" -n 1)
+DATABASE_URL := "postgres://postgres:postgres@localhost:54321/spa?sslmode=disable"
 LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%dT%H:%M:%S) -X main.gitHash=$(GIT_HASH)
-DATABASE_URL := "postgres://postgres:postgres@localhost:54321/spa-test?sslmode=disable"
 
-build:
-	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd/calendar
+buildx:
+	#go build -v -o $(BIN) ./cmd/spa
+	go build -v -o ./bin/spa ./cmd/spa
 
 run: build
 	$(BIN) -config ./configs/config.yaml
 
 build-img:
 	docker build \
-		--build-arg=LDFLAGS="$(LDFLAGS)" \
 		-t $(DOCKER_IMG) \
 		-f build/Dockerfile .
+#		--build-arg=LDFLAGS="$(LDFLAGS)" \
+
 
 run-img: build-img
 	docker run $(DOCKER_IMG)

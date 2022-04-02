@@ -18,7 +18,7 @@ import (
 var configFile string
 
 func init() {
-	flag.StringVar(&configFile, "config", "/etc/calendar/config.yaml", "Path to configuration file")
+	flag.StringVar(&configFile, "config", "/etc/spa-test/config.yaml", "Path to configuration file")
 }
 
 func main() {
@@ -59,7 +59,7 @@ func main() {
 		}
 	}()
 
-	logg.Info("calendar is running...")
+	logg.Info("spa is running...")
 
 	if err := server.Start(ctx); err != nil {
 		logg.Error("failed to start http server: " + err.Error())

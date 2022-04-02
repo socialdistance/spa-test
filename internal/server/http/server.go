@@ -2,6 +2,7 @@ package internalhttp
 
 import (
 	"context"
+	"github.com/gorilla/mux"
 	"github.com/socialdistance/spa-test/internal/app"
 	"net"
 	"net/http"
@@ -22,9 +23,6 @@ type Logger interface {
 	LogHTTP(r *http.Request, code, length int)
 }
 
-type Application interface {
-}
-
 func NewServer(logger Logger, app *app.App, host, port string) *Server {
 	server := &Server{
 		host:   host,
@@ -33,14 +31,36 @@ func NewServer(logger Logger, app *app.App, host, port string) *Server {
 		server: nil,
 	}
 
-	httpServ := &http.Server{
+	httpServer := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
-		Handler: loggingMiddleware(http.HandlerFunc(server.HandleHTTP), logger),
+		Handler: loggingMiddleware(NewRouter(app), logger),
 	}
 
-	server.server = httpServ
+	server.server = httpServer
 
 	return server
+}
+
+func NewRouter(app *app.App) http.Handler {
+	handlers := NewServerHandlers(app)
+
+	r := mux.NewRouter()
+	r.HandleFunc("/", handlers.HelloWorld).Methods("GET")
+	r.HandleFunc("/posts/create", handlers.CreatePost).Methods("POST")
+	r.HandleFunc("/posts/update/{id}", handlers.UpdatePost).Methods("PUT")
+	r.HandleFunc("/posts/delete/{id}", handlers.DeletePost).Methods("DELETE")
+	r.HandleFunc("/posts/{page}", handlers.PaginationHandler).Methods("GET")
+	r.HandleFunc("/posts/search", handlers.SearchHandler).Methods("POST")
+	r.HandleFunc("/posts", handlers.ListPost).Methods("GET")
+	r.HandleFunc("/post", handlers.SelectedPost).Methods("POST")
+
+	r.HandleFunc("/comments/create", handlers.CreateComment).Methods("POST")
+	r.HandleFunc("/comments/update/{id}", handlers.UpdateComment).Methods("PUT")
+	r.HandleFunc("/comments/delete/{id}", handlers.DeleteComment).Methods("DELETE")
+
+	r.HandleFunc("/login", handlers.LoginUser).Methods("POST")
+
+	return r
 }
 
 func (s *Server) Start(ctx context.Context) error {
@@ -55,9 +75,4 @@ func (s *Server) Start(ctx context.Context) error {
 
 func (s *Server) Stop(ctx context.Context) error {
 	return s.server.Shutdown(ctx)
-}
-
-func (s *Server) HandleHTTP(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Ok"))
 }

@@ -1,7 +1,10 @@
 package internalhttp
 
 import (
+	"github.com/dgrijalva/jwt-go"
+	"github.com/socialdistance/spa-test/internal/app"
 	"net/http"
+	"strings"
 )
 
 type ResposeWriter struct {
@@ -27,5 +30,29 @@ func loggingMiddleware(next http.Handler, logger Logger) http.Handler {
 		wrt := &ResposeWriter{w, 0, 0}
 		next.ServeHTTP(wrt, r)
 		logger.LogHTTP(r, wrt.StatusCode, wrt.Bytes)
+	})
+}
+
+func authMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		tokenString := r.Header.Get("Authorization")
+		if len(tokenString) == 0 {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Missing Authorization Header"))
+			return
+		}
+		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
+		claims, err := app.VerifyToken(tokenString)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Error verifying JWT token: " + err.Error()))
+			return
+		}
+		name := claims.(jwt.MapClaims)["name"].(string)
+
+		r.Header.Set("name", name)
+
+		next.ServeHTTP(w, r)
 	})
 }
