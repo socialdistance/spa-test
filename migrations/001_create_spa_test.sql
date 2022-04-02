@@ -78,4 +78,4 @@ INSERT INTO posts (id, title, created, description, user_id) VALUES
 ('5753e882-91e0-6e1a-a827-eef8e8271e50', 'Post 30', '2022-01-06 11:45:00', 'Post description 30', '2673818d-74d2-2bae-bc0a-f6e1956bc4b3')
 ;
 -- +goose Down
-DROP TABLE spa-test;
+-- DROP TABLE spa-test;

@@ -1,9 +1,8 @@
 BIN := "./bin/spa"
 DOCKER_IMG="spa:develop"
 
-#GIT_HASH := $(shell git log --format="%h" -n 1)
-DATABASE_URL := "postgres://postgres:postgres@localhost:54321/spa?sslmode=disable"
-LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%dT%H:%M:%S) -X main.gitHash=$(GIT_HASH)
+DATABASE_URL := "postgres://postgres:postgres@host.docker.internal:5432/spa?sslmode=disable"
+#DATABASE_URL_DOCKER := "postgresql://postgres:postgres@db:5432/spa?sslmode=disable"
 
 buildx:
 	#go build -v -o $(BIN) ./cmd/spa
@@ -16,14 +15,9 @@ build-img:
 	docker build \
 		-t $(DOCKER_IMG) \
 		-f build/Dockerfile .
-#		--build-arg=LDFLAGS="$(LDFLAGS)" \
-
 
 run-img: build-img
 	docker run $(DOCKER_IMG)
-
-version: build
-	$(BIN) version
 
 test:
 	go test -race ./internal/...
