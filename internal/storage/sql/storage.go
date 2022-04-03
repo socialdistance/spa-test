@@ -167,7 +167,7 @@ func (s *Storage) Find(id uuid.UUID) (*storage.Post, error) {
 	return nil, fmt.Errorf("failed to scan SQL result into struct: %w", err)
 }
 
-func (s *Storage) FindAll() ([]storage.Post, error) {
+func (s *Storage) FindAll() (int, error) {
 	posts := make([]storage.Post, 0)
 
 	sql := `
@@ -176,7 +176,7 @@ func (s *Storage) FindAll() ([]storage.Post, error) {
 
 	rows, err := s.conn.Query(s.ctx, sql)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	defer rows.Close()
 
@@ -189,24 +189,28 @@ func (s *Storage) FindAll() ([]storage.Post, error) {
 			&p.Description,
 			&p.UserID,
 		); err != nil {
-			return nil, fmt.Errorf("unable to transform array result into struct: %w", err)
+			return 0, fmt.Errorf("unable to transform array result into struct: %w", err)
 		}
 
 		posts = append(posts, p)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return posts, nil
+	return len(posts), nil
 }
 
-func (s *Storage) Pagination(limit, offset int) ([]storage.Post, error) {
-	posts := make([]storage.Post, 0)
+func (s *Storage) Pagination(limit, offset int) ([]storage.PostCount, error) {
+	posts := make([]storage.PostCount, 0)
+
+	//sql := `
+	//	select id, title, created, description, user_id from posts limit $2 offset $1
+	//`
 
 	sql := `
-		select id, title, created, description, user_id from posts limit $2 offset $1
+	 select posts.id, title, created, description, posts.user_id, count(comments.post_id) from posts LEFT JOIN comments on (posts.id=post_id) group by posts.id, created, title, description, posts.user_id limit $2 offset $1;
 	`
 
 	rows, err := s.conn.Query(s.ctx, sql, offset, limit)
@@ -216,13 +220,14 @@ func (s *Storage) Pagination(limit, offset int) ([]storage.Post, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var p storage.Post
+		var p storage.PostCount
 		if err := rows.Scan(
 			&p.ID,
 			&p.Title,
 			&p.Created,
 			&p.Description,
 			&p.UserID,
+			&p.Count,
 		); err != nil {
 			return nil, fmt.Errorf("unable to transform array result into struct: %w", err)
 		}

@@ -58,7 +58,8 @@ func Test_HttpPagination(t *testing.T) {
 	httpHandlers.ServeHTTP(w, req)
 
 	resp := w.Result()
-	_, err := io.ReadAll(resp.Body)
+	res, err := io.ReadAll(resp.Body)
+	fmt.Println(string(res))
 	require.Nil(t, err)
 }
 
@@ -97,6 +98,19 @@ func Test_HttpSelectedPost(t *testing.T) {
 
 	resp := w.Result()
 	_, err := io.ReadAll(resp.Body)
+	require.Nil(t, err)
+}
+
+func Test_HttpListAll(t *testing.T) {
+	req := httptest.NewRequest("GET", "/posts", nil)
+	w := httptest.NewRecorder()
+
+	httpHandlers := NewRouter(createApp(t))
+	httpHandlers.ServeHTTP(w, req)
+
+	resp := w.Result()
+	res, err := io.ReadAll(resp.Body)
+	fmt.Println(string(res))
 	require.Nil(t, err)
 }
 
@@ -192,6 +206,7 @@ func Test_HttpCrudHandler(t *testing.T) {
 	//
 	//response = w.Result()
 	//responseBody, _ = ioutil.ReadAll(response.Body)
+	//fmt.Println(string(responseBody))
 	//responseExcepted = `[{"id":"a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0","title":"Test title 2","created":"2020-10-20T12:30:00Z","description":"test description 2","userId":"1528371b-229c-4370-839a-0571d969902a"}]` // nolint:lll
 	//require.Equal(t, responseExcepted, string(responseBody))
 	//

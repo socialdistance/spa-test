@@ -14,6 +14,15 @@ type Post struct {
 	Comments    []Comment
 }
 
+type PostCount struct {
+	ID          uuid.UUID
+	Title       string
+	Created     time.Time
+	Description string
+	UserID      uuid.UUID
+	Count       int
+}
+
 type Comment struct {
 	ID       uuid.UUID
 	Username string

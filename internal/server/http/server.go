@@ -45,6 +45,7 @@ func NewRouter(app *app.App) http.Handler {
 	handlers := NewServerHandlers(app)
 
 	r := mux.NewRouter()
+
 	r.HandleFunc("/", handlers.HelloWorld).Methods("GET")
 	r.HandleFunc("/posts/create", handlers.CreatePost).Methods("POST")
 	r.HandleFunc("/posts/update/{id}", handlers.UpdatePost).Methods("PUT")

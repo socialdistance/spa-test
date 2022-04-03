@@ -132,20 +132,9 @@ func (s *ServerHandlers) ListPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	postsDto := make([]PostsDto, 0, len(posts))
-	for _, t := range posts {
-		postsDto = append(postsDto, CreatePostDtoFromModel(t))
-	}
-
-	response, err := json.Marshal(postsDto)
-	if err != nil {
-		RespondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(response)
+	w.Write([]byte(strconv.Itoa(posts)))
 }
 
 func (s *ServerHandlers) PaginationHandler(w http.ResponseWriter, r *http.Request) {
@@ -157,9 +146,9 @@ func (s *ServerHandlers) PaginationHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	postsDto := make([]PostsDto, 0, len(posts))
+	postsDto := make([]PostCountComments, 0, len(posts))
 	for _, t := range posts {
-		postsDto = append(postsDto, CreatePostDtoFromModel(t))
+		postsDto = append(postsDto, CreatePostCountDtoFromModel(t))
 	}
 
 	response, err := json.Marshal(postsDto)

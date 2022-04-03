@@ -33,6 +33,10 @@ type SearchDto struct {
 	Description string `json:"description"`
 }
 
+type CountPosts struct {
+	Count int `json:"count"`
+}
+
 type UserDto struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -41,6 +45,11 @@ type UserDto struct {
 type PostComments struct {
 	PostsDto
 	Comments []storage.Comment
+}
+
+type PostCountComments struct {
+	PostsDto
+	Count int
 }
 
 func (p *PostsDto) GetModel() (*storage.Post, error) {
@@ -72,6 +81,18 @@ func CreatePostDtoFromModel(post storage.Post) PostsDto {
 	postDto.Created = post.Created.Format(time.RFC3339)
 	postDto.Description = post.Description
 	postDto.UserID = post.UserID.String()
+
+	return postDto
+}
+
+func CreatePostCountDtoFromModel(post storage.PostCount) PostCountComments {
+	postDto := PostCountComments{}
+	postDto.ID = post.ID.String()
+	postDto.Title = post.Title
+	postDto.Created = post.Created.Format(time.RFC3339)
+	postDto.Description = post.Description
+	postDto.UserID = post.UserID.String()
+	postDto.Count = post.Count
 
 	return postDto
 }

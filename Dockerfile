@@ -6,10 +6,9 @@ WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
+#RUN go install -v ./...
 
 COPY . .
-
-#RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 
 RUN GO_ENABLED=1 go build -o ./bin/spa ./cmd/spa
 

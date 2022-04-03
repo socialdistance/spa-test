@@ -25,20 +25,14 @@ type Storage interface {
 	Update(e storage.Post) error
 	Delete(id uuid.UUID) error
 	Find(id uuid.UUID) (*storage.Post, error)
-	FindAll() ([]storage.Post, error)
+	FindAll() (int, error)
 	Search(title, description string) ([]storage.Post, error)
-	Pagination(limit, offset int) ([]storage.Post, error)
+	Pagination(limit, offset int) ([]storage.PostCount, error)
 	CreateComment(c storage.Comment) error
 	UpdateComment(c storage.Comment) error
 	DeleteComment(id uuid.UUID) error
 	FindAccount(username string) (*storage.User, error)
 }
-
-//type AuthManager interface {
-//	Generate(username string) (storage.UserContext, error)
-//	Verify(accessToken string) (storage.UserContext, error)
-//	Authorize(ctx context.Context, username, password string) (*storage.User, error)
-//}
 
 func New(logger Logger, storage Storage) *App {
 	return &App{
@@ -133,7 +127,7 @@ func (a *App) DeletePost(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (a *App) PaginationPosts(ctx context.Context, page int) ([]storage.Post, error) {
+func (a *App) PaginationPosts(ctx context.Context, page int) ([]storage.PostCount, error) {
 	limit := 10
 	offset := limit * (page - 1)
 
@@ -156,7 +150,7 @@ func (a *App) SearchApp(ctx context.Context, title, description string) ([]stora
 	return posts, nil
 }
 
-func (a *App) GetPosts(ctx context.Context) ([]storage.Post, error) {
+func (a *App) GetPosts(ctx context.Context) (int, error) {
 	return a.Storage.FindAll()
 }
 

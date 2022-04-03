@@ -1,8 +1,8 @@
 BIN := "./bin/spa"
 DOCKER_IMG="spa:develop"
 
-DATABASE_URL := "postgres://postgres:postgres@host.docker.internal:5432/spa?sslmode=disable"
-#DATABASE_URL_DOCKER := "postgresql://postgres:postgres@db:5432/spa?sslmode=disable"
+#DATABASE_URL := "postgres://postgres:postgres@host.docker.internal:5432/spa?sslmode=disable"
+DATABASE_URL := "postgresql://postgres:postgres@localhost:54321/spa?sslmode=disable"
 
 buildx:
 	#go build -v -o $(BIN) ./cmd/spa
