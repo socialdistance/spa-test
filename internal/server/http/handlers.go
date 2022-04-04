@@ -48,6 +48,7 @@ func (s *ServerHandlers) SelectedPost(w http.ResponseWriter, r *http.Request) {
 	responseData, _ := json.Marshal(selectedPost)
 	fmt.Println(string(responseData))
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(responseData)
 }
@@ -74,6 +75,7 @@ func (s *ServerHandlers) CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	responseData, _ := json.Marshal(dto)
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(responseData)
 }
@@ -103,6 +105,7 @@ func (s *ServerHandlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	responseData, _ := json.Marshal(dto)
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(responseData)
 }
@@ -121,6 +124,7 @@ func (s *ServerHandlers) DeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -196,6 +200,7 @@ func (s *ServerHandlers) SearchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 }
@@ -222,6 +227,7 @@ func (s *ServerHandlers) CreateComment(w http.ResponseWriter, r *http.Request) {
 
 	responseData, _ := json.Marshal(dto)
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(responseData)
 }
@@ -251,6 +257,7 @@ func (s *ServerHandlers) UpdateComment(w http.ResponseWriter, r *http.Request) {
 
 	responseData, _ := json.Marshal(dto)
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(responseData)
 }
@@ -270,6 +277,7 @@ func (s *ServerHandlers) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -299,6 +307,7 @@ func (s *ServerHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 }
