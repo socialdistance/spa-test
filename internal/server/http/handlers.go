@@ -125,16 +125,20 @@ func (s *ServerHandlers) DeletePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ServerHandlers) ListPost(w http.ResponseWriter, r *http.Request) {
+	var dto CountPosts
 	posts, err := s.app.GetPosts(r.Context())
-
 	if err != nil {
 		RespondError(w, http.StatusBadRequest, err)
 		return
 	}
 
+	dto.Count = posts
+
+	res, err := json.Marshal(dto)
+
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(strconv.Itoa(posts)))
+	w.Write(res)
 }
 
 func (s *ServerHandlers) PaginationHandler(w http.ResponseWriter, r *http.Request) {

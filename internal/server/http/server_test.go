@@ -162,65 +162,6 @@ func Test_HttpCreateComment(t *testing.T) {
 	//require.Equal(t, responseExcepted, string(responseBody))
 }
 
-func Test_HttpCrudHandler(t *testing.T) {
-	body := bytes.NewBufferString(`{
-		"id": "a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0",
-		"title": "Test title",
-		"created": "2022-04-01T18:43:25.391Z",
-		"description": "test description",
-		"userId": "1528371b-229c-4370-839a-0571d969902a"
-	}`)
-
-	request := httptest.NewRequest("POST", "/posts/create", body)
-	w := httptest.NewRecorder()
-
-	testHandlers := NewRouter(createApp(t))
-	testHandlers.ServeHTTP(w, request)
-
-	response := w.Result()
-	responseBody, _ := ioutil.ReadAll(response.Body)
-	responseExcepted := `{"id":"a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0","title":"Test title","created":"2020-10-20 12:30:00","description":"test description","userId":"1528371b-229c-4370-839a-0571d969902a"}` //nolint:lll
-	require.Equal(t, responseExcepted, string(responseBody))
-
-	//body = bytes.NewBufferString(`{
-	//	"title": "Test title 2",
-	//	"created": "2022-04-01T18:43:25.391Z",
-	//	"description": "test description 2",
-	//	"userId": "1528371b-229c-4370-839a-0571d969902a"
-	//}`)
-	//
-	//request = httptest.NewRequest("PUT", "/posts/update/a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0", body)
-	//w = httptest.NewRecorder()
-	//
-	//testHandlers.ServeHTTP(w, request)
-	//
-	//response = w.Result()
-	//responseBody, _ = ioutil.ReadAll(response.Body)
-	//responseExcepted = `{"id":"a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0","title":"Test title 2","created":"2020-10-20 12:30:00","description":"test description 2","userId":"1528371b-229c-4370-839a-0571d969902a"}` //nolint:lll
-	//require.Equal(t, responseExcepted, string(responseBody))
-	//
-	//requestListAll := httptest.NewRequest("GET", "/posts", body)
-	//w = httptest.NewRecorder()
-	//
-	//testHandlers.ServeHTTP(w, requestListAll)
-	//
-	//response = w.Result()
-	//responseBody, _ = ioutil.ReadAll(response.Body)
-	//fmt.Println(string(responseBody))
-	//responseExcepted = `[{"id":"a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0","title":"Test title 2","created":"2020-10-20T12:30:00Z","description":"test description 2","userId":"1528371b-229c-4370-839a-0571d969902a"}]` // nolint:lll
-	//require.Equal(t, responseExcepted, string(responseBody))
-	//
-	//request = httptest.NewRequest("DELETE", "/posts/delete/a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0", body)
-	//w = httptest.NewRecorder()
-	//
-	//testHandlers.ServeHTTP(w, request)
-	//
-	//response = w.Result()
-	//responseBody, _ = ioutil.ReadAll(response.Body)
-	//responseExcepted = ""
-	//require.Equal(t, responseExcepted, string(responseBody))
-}
-
 func createApp(t *testing.T) *app.App {
 	configContent, _ := os.ReadFile(configFile)
 
