@@ -26,6 +26,18 @@ services:
     networks:
       - default
 
+#  client:
+#    container_name: client
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.client
+#    ports:
+#      - "3000:3000"
+#    networks:
+#      - default
+#    depends_on:
+#      - server
+
   server:
     container_name: server
     build:

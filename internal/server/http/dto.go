@@ -53,7 +53,7 @@ type PostCountComments struct {
 }
 
 func (p *PostsDto) GetModel() (*storage.Post, error) {
-	created, err := time.Parse("2006-01-02T15:04:05.000Z", p.Created)
+	created, err := time.Parse("2006-01-02T15:04:05Z", p.Created)
 	if err != nil {
 		return nil, fmt.Errorf("error: Created exprected to be 'yyyy-mm-dd hh:mm:ss', got: %s, %w", p.Created, err)
 	}
