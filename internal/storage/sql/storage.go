@@ -139,6 +139,7 @@ func (s *Storage) Find(id uuid.UUID) (*storage.Post, error) {
 	)
 
 	rows, _ := s.conn.Query(s.ctx, sqlComments, id)
+	defer rows.Close()
 
 	for rows.Next() {
 		var c storage.Comment
