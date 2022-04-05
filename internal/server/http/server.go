@@ -72,20 +72,20 @@ func NewRouter(app *app.App) http.Handler {
 	//
 	//r.HandleFunc("/login", handlers.LoginUser).Methods("POST")
 
-	r.HandleFunc("/", handlers.HelloWorld).Methods("GET")
-	r.HandleFunc("/posts/create", handlers.CreatePost).Methods("POST")
-	r.HandleFunc("/posts/update/{id}", handlers.UpdatePost).Methods("PUT")
-	r.HandleFunc("/posts/delete/{id}", handlers.DeletePost).Methods("DELETE")
-	r.HandleFunc("/posts/{page}", handlers.PaginationHandler).Methods("GET")
-	r.HandleFunc("/posts/search", handlers.SearchHandler).Methods("POST")
-	r.HandleFunc("/posts", handlers.ListPost).Methods("GET")
-	r.HandleFunc("/post", handlers.SelectedPost).Methods("POST")
+	r.HandleFunc("/", handlers.HelloWorld).Methods("GET", "OPTIONS")
+	r.HandleFunc("/posts/create", handlers.CreatePost).Methods("POST", "OPTIONS")
+	r.HandleFunc("/posts/update/{id}", handlers.UpdatePost).Methods("PUT", "OPTIONS")
+	r.HandleFunc("/posts/delete/{id}", handlers.DeletePost).Methods("DELETE", "OPTIONS")
+	r.HandleFunc("/posts/{page}", handlers.PaginationHandler).Methods("GET", "OPTIONS")
+	r.HandleFunc("/posts/search", handlers.SearchHandler).Methods("POST", "OPTIONS")
+	r.HandleFunc("/posts", handlers.ListPost).Methods("GET", "OPTIONS")
+	r.HandleFunc("/post", handlers.SelectedPost).Methods("POST", "OPTIONS")
 
-	r.HandleFunc("/comments/create", handlers.CreateComment).Methods("POST")
-	r.HandleFunc("/comments/update/{id}", handlers.UpdateComment).Methods("PUT")
-	r.HandleFunc("/comments/delete/{id}", handlers.DeleteComment).Methods("DELETE")
+	r.HandleFunc("/comments/create", handlers.CreateComment).Methods("POST", "OPTIONS")
+	r.HandleFunc("/comments/update/{id}", handlers.UpdateComment).Methods("PUT", "OPTIONS")
+	r.HandleFunc("/comments/delete/{id}", handlers.DeleteComment).Methods("DELETE", "OPTIONS")
 
-	r.HandleFunc("/login", handlers.LoginUser).Methods("POST")
+	r.HandleFunc("/login", handlers.LoginUser).Methods("POST", "OPTIONS")
 
 	return r
 }
