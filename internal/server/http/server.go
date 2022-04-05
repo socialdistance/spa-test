@@ -33,7 +33,7 @@ func NewServer(logger Logger, app *app.App, host, port string) *Server {
 
 	httpServer := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
-		Handler: loggingMiddleware(NewRouter(app), logger),
+		Handler: CORS(loggingMiddleware(NewRouter(app), logger)),
 	}
 
 	server.server = httpServer
@@ -83,7 +83,7 @@ func NewRouter(app *app.App) http.Handler {
 	r.HandleFunc("/comments/create", handlers.CreateComment).Methods("POST")
 	r.HandleFunc("/comments/update/{id}", handlers.UpdateComment).Methods("PUT")
 	r.HandleFunc("/comments/delete/{id}", handlers.DeleteComment).Methods("DELETE")
-	
+
 	r.HandleFunc("/login", handlers.LoginUser).Methods("POST")
 
 	return r
