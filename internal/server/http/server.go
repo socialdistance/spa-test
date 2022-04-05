@@ -33,7 +33,7 @@ func NewServer(logger Logger, app *app.App, host, port string) *Server {
 
 	httpServer := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
-		Handler: CORS(loggingMiddleware(NewRouter(app), logger)),
+		Handler: loggingMiddleware(NewRouter(app), logger),
 	}
 
 	server.server = httpServer
@@ -45,6 +45,7 @@ func NewRouter(app *app.App) http.Handler {
 	handlers := NewServerHandlers(app)
 
 	r := mux.NewRouter()
+	r.Use(CORS)
 
 	//helloWorldFn := http.HandlerFunc(handlers.HelloWorld)
 	//createPostFn := http.HandlerFunc(handlers.CreatePost)
