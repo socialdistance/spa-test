@@ -46,11 +46,21 @@ func (s *ServerHandlers) SelectedPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responseData, err := json.Marshal(selectedPost)
+	selectedPostDto := CreatePostWithCommentsDtoFromModel(*selectedPost)
+
+	//postsCommentDto := make([]CommentDto, 0)
+	//for _, s := range selectedPostDto.Comments {
+	//	postsCommentDto = append(postsCommentDto, CreateCommentDtoModel(s))
+	//}
+	//
+	//selectedPostDto.Comments = []storage.Comment{}
+
+	responseData, err := json.Marshal(selectedPostDto)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err)
 		return
 	}
+
 	w.Header().Add("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)

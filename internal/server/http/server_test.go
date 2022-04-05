@@ -97,7 +97,8 @@ func Test_HttpSelectedPost(t *testing.T) {
 	httpHandlers.ServeHTTP(w, req)
 
 	resp := w.Result()
-	_, err := io.ReadAll(resp.Body)
+	res, err := io.ReadAll(resp.Body)
+	fmt.Println(string(res))
 	require.Nil(t, err)
 }
 

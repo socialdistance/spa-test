@@ -85,6 +85,18 @@ func CreatePostDtoFromModel(post storage.Post) PostsDto {
 	return postDto
 }
 
+func CreatePostWithCommentsDtoFromModel(post storage.Post) PostComments {
+	postDto := PostComments{}
+	postDto.ID = post.ID.String()
+	postDto.Title = post.Title
+	postDto.Created = post.Created.Format(time.RFC3339)
+	postDto.Description = post.Description
+	postDto.UserID = post.UserID.String()
+	postDto.Comments = post.Comments
+
+	return postDto
+}
+
 func CreatePostCountDtoFromModel(post storage.PostCount) PostCountComments {
 	postDto := PostCountComments{}
 	postDto.ID = post.ID.String()
@@ -95,6 +107,17 @@ func CreatePostCountDtoFromModel(post storage.PostCount) PostCountComments {
 	postDto.Count = post.Count
 
 	return postDto
+}
+
+func CreateCommentDtoModel(comment storage.Comment) CommentDto {
+	commentDto := CommentDto{}
+	commentDto.ID = comment.ID.String()
+	commentDto.Username = comment.Username
+	commentDto.Content = comment.Content
+	commentDto.UserID = comment.UserID.String()
+	commentDto.PostID = comment.PostID.String()
+
+	return commentDto
 }
 
 func (p *CommentDto) GetModelComment() (*storage.Comment, error) {

@@ -5,7 +5,7 @@ buildx:
 	go build -v -o ./bin/spa ./cmd/spa
 
 run: build
-	$(BIN) -config ./configs/config.yaml
+	./bin/spa -config ./configs/config.yaml
 
 build-test:
 	docker-compose build
