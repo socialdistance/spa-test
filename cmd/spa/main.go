@@ -18,7 +18,7 @@ import (
 var configFile string
 
 func init() {
-	flag.StringVar(&configFile, "config", "./configs/config.yaml", "Path to configuration file")
+	flag.StringVar(&configFile, "config", "/etc/spa-test/config.yaml", "Path to configuration file")
 }
 
 func main() {
