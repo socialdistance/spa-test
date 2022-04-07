@@ -38,6 +38,7 @@ func CORS(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Headers:", "*")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Content-Type", "application/json")
 
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)

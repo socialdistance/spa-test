@@ -3,8 +3,8 @@ logger:
   filename: "stderr"
 storage:
     type: "sql"
-    url: "postgresql://postgres:postgres@db:5432/spa?sslmode=disable"
-#    url: "postgresql://postgres:postgres@localhost:54321/spa?sslmode=disable"
+    url: "postgresql://postgres:postgres@db:5432/spa?sslmode=disable&pool_max_conns=10"
+#    url: "postgresql://postgres:postgres@localhost:54321/spa?sslmode=disable&pool_max_conns=10"
 http:
 #  host: "127.0.0.1"
   host: "0.0.0.0"

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/socialdistance/spa-test/internal/storage"
 	"os"
 	"time"
@@ -14,7 +15,7 @@ import (
 
 type Storage struct {
 	ctx  context.Context
-	conn *pgx.Conn
+	conn *pgxpool.Pool
 	url  string
 }
 
@@ -26,7 +27,8 @@ func New(ctx context.Context, url string) *Storage {
 }
 
 func (s *Storage) Connect(ctx context.Context) error {
-	conn, err := pgx.Connect(ctx, s.url)
+	//conn, err := pgx.Connect(ctx, s.url)
+	conn, err := pgxpool.Connect(ctx, s.url)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect database %s", err)
 		os.Exit(1)
@@ -37,8 +39,8 @@ func (s *Storage) Connect(ctx context.Context) error {
 	return nil
 }
 
-func (s *Storage) Close(ctx context.Context) error {
-	return s.conn.Close(ctx)
+func (s *Storage) Close(ctx context.Context) {
+	s.conn.Close()
 }
 
 func (s *Storage) FindAccount(username string) (*storage.User, error) {

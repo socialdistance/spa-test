@@ -55,7 +55,7 @@ INSERT INTO posts (id, title, created, description, user_id) VALUES
 ('fcfa069c-28a9-48d6-b48d-befc8133f3b4', 'Post 7', '2022-01-06 06:00:00', 'Post description 7', 'f5bed4b6-8695-47f2-a5c3-3a0509e7f8a6'),
 ('87a876ce-4488-45a9-bd36-ca72368a7285', 'Post 8', '2022-01-06 07:00:00', 'Post description 8', '4ca78f2a-03bc-412a-9a8e-c3d96dd6fcb6'),
 ('4753e882-91e0-4e1a-a827-eef8d8271e50', 'Post 9', '2022-01-06 08:45:00', 'Post description 9', '2672819d-74d2-4bae-bc0a-f6e1956bc4b3'),
-('fcfa069c-28a9-48d6-b48d-befc8133f2b2', 'Post 10', '2022-01-06 09:00:00', 'Post description 10', 'f8bed4b6-8695-47f2-a5c3-3a0509e7f8a6'),
+('fcfa069c-27a9-48d6-b48d-befc8133f2b2', 'Post 10', '2022-01-06 09:00:00', 'Post description 10', 'f8bed4b6-8695-47f2-a5c3-3a0509e7f8a6'),
 ('87a876ce-4488-45a9-bd36-ca72368a7185', 'Post 11', '2022-01-06 10:00:00', 'Post description 11', '4ca98f2a-03bc-412a-9a8e-c3d96dd6fcb6'),
 ('5753e882-91e0-4e1a-a827-eef8d1271e50', 'Post 12', '2022-01-06 11:45:00', 'Post description 12', '2623819d-74d2-4bae-bc0a-f6e1956bc4b3'),
 ('fcfa069c-28a9-48d6-b48d-befc8123f2b4', 'Post 13', '2022-01-06 12:00:00', 'Post description 13', 'f3bed6b6-8695-47f2-a5c3-3a0509e7f8a6'),
