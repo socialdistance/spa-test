@@ -119,8 +119,8 @@ func (s *Storage) DeleteComment(id uuid.UUID) error {
 }
 
 func (s *Storage) Find(id uuid.UUID) (*storage.Post, error) {
-	var p storage.Post
 	var comments []storage.Comment
+	var p storage.Post
 
 	sql := `
 		select id, title, created, description, user_id from posts where id = $1
@@ -130,15 +130,29 @@ func (s *Storage) Find(id uuid.UUID) (*storage.Post, error) {
 		select id, username, content, user_id, post_id from comments where post_id=$1;
 	`
 
-	err := s.conn.QueryRow(s.ctx, sql, id).Scan(
-		&p.ID,
-		&p.Title,
-		&p.Created,
-		&p.Description,
-		&p.UserID,
-	)
+	//err := s.conn.QueryRow(s.ctx, sql, id).Scan(
+	//	&p.ID,
+	//	&p.Title,
+	//	&p.Created,
+	//	&p.Description,
+	//	&p.UserID,
+	//)
 
-	rows, _ := s.conn.Query(s.ctx, sqlComments, id)
+	rowsPost, err := s.conn.Query(s.ctx, sql, id)
+	defer rowsPost.Close()
+
+	for rowsPost.Next() {
+		if err := rowsPost.Scan(
+			&p.ID,
+			&p.Title,
+			&p.Created,
+			&p.Description,
+			&p.UserID); err != nil {
+			return nil, fmt.Errorf("unable to transform array result into struct: %w", err)
+		}
+	}
+
+	rows, err1 := s.conn.Query(s.ctx, sqlComments, id)
 	defer rows.Close()
 
 	for rows.Next() {
@@ -149,7 +163,7 @@ func (s *Storage) Find(id uuid.UUID) (*storage.Post, error) {
 			&c.Content,
 			&c.UserID,
 			&c.PostID,
-		); err != nil {
+		); err1 != nil {
 			return nil, fmt.Errorf("unable to transform array result into struct: %w", err)
 		}
 
@@ -206,12 +220,8 @@ func (s *Storage) FindAll() (int, error) {
 func (s *Storage) Pagination(limit, offset int) ([]storage.PostCount, error) {
 	posts := make([]storage.PostCount, 0)
 
-	//sql := `
-	//	select id, title, created, description, user_id from posts limit $2 offset $1
-	//`
-
 	sql := `
-	 select posts.id, title, created, description, posts.user_id, count(comments.post_id) from posts LEFT JOIN comments on (posts.id=post_id) group by posts.id, created, title, description, posts.user_id limit $2 offset $1;
+	 select posts.id, title, created, description, posts.user_id, count(comments.post_id) from posts LEFT JOIN comments on posts.id=post_id group by posts.id, created, title, description, posts.user_id order by created limit $2 offset $1;
 	`
 
 	rows, err := s.conn.Query(s.ctx, sql, offset, limit)

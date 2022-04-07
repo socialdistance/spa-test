@@ -6,9 +6,11 @@ WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
 #RUN go mod download
-RUN go install -v ./...
 
 COPY . .
+
+RUN go install -v ./...
+
 
 RUN GO_ENABLED=1 go build -o ./bin/spa ./cmd/spa
 

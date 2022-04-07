@@ -11,6 +11,7 @@ type Config struct {
 	Logger  LoggerConf
 	Storage StorageConf
 	HTTP    HTTPConf
+	Token   TokenConf
 }
 
 type (
@@ -42,6 +43,10 @@ type StorageConf struct {
 type HTTPConf struct {
 	Host string
 	Port string
+}
+
+type TokenConf struct {
+	Key string
 }
 
 func NewConfig() Config {

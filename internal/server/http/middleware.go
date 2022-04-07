@@ -2,7 +2,7 @@ package internalhttp
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"github.com/socialdistance/spa-test/internal/app"
+	"github.com/socialdistance/spa-test/internal/auth"
 	"net/http"
 	"strings"
 )
@@ -59,7 +59,7 @@ func authMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
-		claims, err := app.VerifyToken(tokenString)
+		claims, err := auth.VerifyToken(tokenString)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Error verifying JWT token: " + err.Error()))

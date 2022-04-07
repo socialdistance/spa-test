@@ -83,12 +83,13 @@ func Test_HttpLogin(t *testing.T) {
 
 func Test_HttpSelectedPost(t *testing.T) {
 	body := bytes.NewBufferString(`{
-		"id": "5753e882-91e0-4e1a-a827-eef8d8271e50",
-		"title": "Test title",
-		"created": "2022-04-01T18:43:25.391Z",
-		"description": "test description",
-		"userId": "1528371b-229c-4370-839a-0571d969902a"
+		"id": "fcfa069c-28a9-48d6-b48d-befc8133f2b4"
 	}`)
+
+	//"title": "Test title",
+	//"created": "2022-04-01T18:43:25.391Z",
+	//"description": "test description",
+	//"userId": "1528371b-229c-4370-839a-0571d969902a"
 
 	req := httptest.NewRequest("POST", "/post", body)
 	w := httptest.NewRecorder()

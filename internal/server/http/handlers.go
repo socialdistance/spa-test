@@ -34,26 +34,14 @@ func (s *ServerHandlers) SelectedPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	post, err := dto.GetModel()
-	if err != nil {
-		RespondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	selectedPost, err := s.app.SelectPostApp(r.Context(), *post)
+	selectedPost, err := s.app.SelectPostApp(r.Context(), dto.ID)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	selectedPostDto := CreatePostWithCommentsDtoFromModel(*selectedPost)
-
-	//postsCommentDto := make([]CommentDto, 0)
-	//for _, s := range selectedPostDto.Comments {
-	//	postsCommentDto = append(postsCommentDto, CreateCommentDtoModel(s))
-	//}
-	//
-	//selectedPostDto.Comments = []storage.Comment{}
+	selectedPostDto.Comments = CreateCommentDtoModel(selectedPost.Comments)
 
 	responseData, err := json.Marshal(selectedPostDto)
 	if err != nil {
@@ -171,7 +159,7 @@ func (s *ServerHandlers) PaginationHandler(w http.ResponseWriter, r *http.Reques
 
 	postsDto := make([]PostCountComments, 0, len(posts))
 	for _, t := range posts {
-		postsDto = append(postsDto, CreatePostCountDtoFromModel(t))
+		postsDto = append(postsDto, CreatePostCountDtoFromModel(t, page))
 	}
 
 	response, err := json.Marshal(postsDto)
@@ -286,7 +274,6 @@ func (s *ServerHandlers) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = s.app.DeleteCommentApp(r.Context(), id)
-	fmt.Println(err)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err)
 		return

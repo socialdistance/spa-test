@@ -3,8 +3,8 @@ package app
 import (
 	"context"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
+	"github.com/socialdistance/spa-test/internal/auth"
 	"github.com/socialdistance/spa-test/internal/storage"
 )
 
@@ -41,10 +41,15 @@ func New(logger Logger, storage Storage) *App {
 	}
 }
 
-func (a *App) SelectPostApp(ctx context.Context, post storage.Post) (*storage.Post, error) {
-	a.Logger.Debug("App.SelectPost %s", post.ID)
+func (a *App) SelectPostApp(ctx context.Context, postID string) (*storage.Post, error) {
+	a.Logger.Debug("App.SelectPost %s", postID)
 
-	selectedPost, err := a.Storage.Find(post.ID)
+	postIdString, err := uuid.Parse(postID)
+	if err != nil {
+		a.Logger.Error("App.SelectPost error: find existing post error: %s", err)
+	}
+
+	selectedPost, err := a.Storage.Find(postIdString)
 	if err != nil {
 		a.Logger.Error("App.SelectPost error: find existing post error: %s", err)
 		return nil, err
@@ -128,7 +133,7 @@ func (a *App) DeletePost(ctx context.Context, id uuid.UUID) error {
 }
 
 func (a *App) PaginationPosts(ctx context.Context, page int) ([]storage.PostCount, error) {
-	limit := 10
+	limit := 9
 	offset := limit * (page - 1)
 
 	posts, err := a.Storage.Pagination(limit, offset)
@@ -200,28 +205,8 @@ func (a *App) Authorize(ctx context.Context, username, password string) (*storag
 	//return c.JSON(http.StatusNotFound, domain.HTTPError{Error: "incorrect username or password"})
 	//}
 
-	token, err := getToken(username)
+	token, err := auth.GetToken(username)
 	exitingUser.Token = token
 
 	return exitingUser, nil
-}
-
-func getToken(username string) (string, error) {
-	signingKey := []byte("keymaker")
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"name": username,
-	})
-	tokenString, err := token.SignedString(signingKey)
-	return tokenString, err
-}
-
-func VerifyToken(tokenString string) (jwt.Claims, error) {
-	signingKey := []byte("keymaker")
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return signingKey, nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	return token.Claims, err
 }

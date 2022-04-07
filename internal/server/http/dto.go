@@ -44,11 +44,12 @@ type UserDto struct {
 
 type PostComments struct {
 	PostsDto
-	Comments []storage.Comment
+	Comments []CommentDto `json:"comments"`
 }
 
 type PostCountComments struct {
 	PostsDto
+	Group int
 	Count int
 }
 
@@ -92,12 +93,12 @@ func CreatePostWithCommentsDtoFromModel(post storage.Post) PostComments {
 	postDto.Created = post.Created.Format(time.RFC3339)
 	postDto.Description = post.Description
 	postDto.UserID = post.UserID.String()
-	postDto.Comments = post.Comments
+	//postDto.Comments = post.Comments
 
 	return postDto
 }
 
-func CreatePostCountDtoFromModel(post storage.PostCount) PostCountComments {
+func CreatePostCountDtoFromModel(post storage.PostCount, group int) PostCountComments {
 	postDto := PostCountComments{}
 	postDto.ID = post.ID.String()
 	postDto.Title = post.Title
@@ -105,19 +106,24 @@ func CreatePostCountDtoFromModel(post storage.PostCount) PostCountComments {
 	postDto.Description = post.Description
 	postDto.UserID = post.UserID.String()
 	postDto.Count = post.Count
+	postDto.Group = group
 
 	return postDto
 }
 
-func CreateCommentDtoModel(comment storage.Comment) CommentDto {
+func CreateCommentDtoModel(comment []storage.Comment) []CommentDto {
 	commentDto := CommentDto{}
-	commentDto.ID = comment.ID.String()
-	commentDto.Username = comment.Username
-	commentDto.Content = comment.Content
-	commentDto.UserID = comment.UserID.String()
-	commentDto.PostID = comment.PostID.String()
+	result := make([]CommentDto, 0)
+	for _, t := range comment {
+		commentDto.ID = t.ID.String()
+		commentDto.Username = t.Username
+		commentDto.Content = t.Content
+		commentDto.UserID = t.UserID.String()
+		commentDto.PostID = t.PostID.String()
+		result = append(result, commentDto)
+	}
 
-	return commentDto
+	return result
 }
 
 func (p *CommentDto) GetModelComment() (*storage.Comment, error) {
