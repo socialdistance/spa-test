@@ -49,8 +49,8 @@ type PostComments struct {
 
 type PostCountComments struct {
 	PostsDto
-	Group int
-	Count int
+	Group int `json:"group"`
+	Count int `json:"count"`
 }
 
 func (p *PostsDto) GetModel() (*storage.Post, error) {
