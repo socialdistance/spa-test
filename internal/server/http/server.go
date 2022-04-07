@@ -59,7 +59,7 @@ func NewRouter(app *app.App) http.Handler {
 	//
 	//r.HandleFunc("/", handlers.HelloWorld).Methods("GET", "OPTIONS")
 	//r.Handle("/posts/create", authMiddleware(createPostFn)).Methods("POST", "OPTIONS")
-	r.Handle("/posts/update/{id}", authMiddleware(updatePostFn)).Methods("PUT", "OPTIONS")
+	//r.Handle("/posts/update/{id}", authMiddleware(updatePostFn)).Methods("PUT", "OPTIONS")
 	//r.Handle("/posts/delete/{id}", authMiddleware(deletePostFn)).Methods("DELETE", "OPTIONS")
 	//r.HandleFunc("/posts/{page}", handlers.PaginationHandler).Methods("GET", "OPTIONS")
 	//r.HandleFunc("/posts/search", handlers.SearchHandler).Methods("POST", "OPTIONS")
@@ -74,6 +74,7 @@ func NewRouter(app *app.App) http.Handler {
 
 	r.HandleFunc("/", handlers.HelloWorld).Methods("GET", "OPTIONS")
 	r.HandleFunc("/posts/create", handlers.CreatePost).Methods("POST", "OPTIONS")
+	r.Handle("/posts/update/{id}", authMiddleware(updatePostFn)).Methods("PUT", "OPTIONS")
 	//r.HandleFunc("/posts/update/{id}", handlers.UpdatePost).Methods("PUT", "OPTIONS")
 	r.HandleFunc("/posts/delete/{id}", handlers.DeletePost).Methods("DELETE", "OPTIONS")
 	r.HandleFunc("/posts/{page}", handlers.PaginationHandler).Methods("GET", "OPTIONS")
