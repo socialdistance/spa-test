@@ -34,8 +34,8 @@ func Test_HttpServerHelloWorld(t *testing.T) {
 
 func Test_HttpSearch(t *testing.T) {
 	body := bytes.NewBufferString(`{
-		"title": "post",
-		"description": ""
+		"title": "",
+		"description": "DESCRIPTION 10"
 	}`)
 
 	req := httptest.NewRequest("POST", "/posts/search", body)

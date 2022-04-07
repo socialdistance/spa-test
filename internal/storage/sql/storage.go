@@ -254,13 +254,13 @@ func (s *Storage) Pagination(limit, offset int) ([]storage.PostCount, error) {
 func (s *Storage) Search(title, description string) ([]storage.Post, error) {
 	posts := make([]storage.Post, 0)
 
-	//sql := `
-	//	SELECT * FROM posts WHERE title LIKE '%' || $1 || '%' AND description LIKE '%' || $2 || '%'
-	//`
-
 	sql := `
-		SELECT * FROM posts WHERE title LIKE $1 OR description LIKE $2
+		SELECT * FROM posts WHERE title ILIKE '%' || $1 || '%' AND description ILIKE '%' || $2 || '%'
 	`
+
+	//sql := `
+	//	SELECT * FROM posts WHERE title LIKE $1 OR description LIKE $2
+	//`
 
 	rows, err := s.conn.Query(s.ctx, sql, title, description)
 	if err != nil {
