@@ -142,7 +142,7 @@ func Test_HttpCreateComment(t *testing.T) {
 		"postId": "a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b0"
 	}`)
 
-	request := httptest.NewRequest("PUT", "/comments/update/a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b8", body)
+	request := httptest.NewRequest("PUT", "/comments/update/a17b3f01-fbd7-40e5-8d8e-9b4cf1ef21b8/1", body)
 	w = httptest.NewRecorder()
 
 	httpHandlers.ServeHTTP(w, request)
